@@ -11,6 +11,8 @@
 #ifndef EIGEN_GENERIC_PACKET_MATH_H
 #define EIGEN_GENERIC_PACKET_MATH_H
 
+#include <iostream>
+
 namespace Eigen {
 
 namespace internal {
@@ -147,7 +149,11 @@ pcast(const SrcPacket& a, const SrcPacket& /*b*/, const SrcPacket& /*c*/, const 
 /** \internal \returns a + b (coeff-wise) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
 padd(const Packet& a,
-        const Packet& b) { return a+b; }
+     const Packet& b)  { return a+b; }
+
+EIGEN_DEVICE_FUNC inline float
+padd(const float& a,
+     const float& b)  { using namespace std;  if (!std::isfinite(a+b)) { cerr << "a = " << a << " b = " << b << " a + b = " << a + b << endl;  abort(); } return a+b; }
 
 /** \internal \returns a - b (coeff-wise) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
@@ -166,7 +172,11 @@ pconj(const Packet& a) { return numext::conj(a); }
 /** \internal \returns a * b (coeff-wise) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet
 pmul(const Packet& a,
-        const Packet& b) { return a*b; }
+     const Packet& b) { return a * b; }
+
+EIGEN_DEVICE_FUNC inline float
+pmul(const float& a,
+     const float& b)  { using namespace std;  if (!std::isfinite(a*b)) { cerr << "a = " << a << " b = " << b << " a + b = " << a * b << endl;  abort(); } return a*b; }
 
 /** \internal \returns a / b (coeff-wise) */
 template<typename Packet> EIGEN_DEVICE_FUNC inline Packet

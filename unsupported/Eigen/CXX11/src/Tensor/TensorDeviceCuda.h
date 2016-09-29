@@ -317,8 +317,13 @@ struct GpuDevice {
 };
 
 #define LAUNCH_CUDA_KERNEL(kernel, gridsize, blocksize, sharedmem, device, ...)             \
+    { \
   (kernel) <<< (gridsize), (blocksize), (sharedmem), (device).stream() >>> (__VA_ARGS__);   \
-  assert(cudaGetLastError() == cudaSuccess);
+  if (cudaPeekAtLastError() != cudaSuccess) { \
+ ::printf("CUDA error %s\n", cudaGetErrorString(cudaPeekAtLastError())); \
+    }                                                                       \
+  assert(cudaGetLastError() == cudaSuccess); \
+}
 
 
 // FIXME: Should be device and kernel specific.

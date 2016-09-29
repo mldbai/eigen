@@ -158,9 +158,9 @@ class TensorExecutor<Expression, ThreadPoolDevice, Vectorizable> {
                            EvalRange<Evaluator, Index, Vectorizable>::run(&evaluator, first, last);
                          });
 #else
-      size_t num_threads = device.numThreads();
+      size_t num_threads = 1;//device.numThreads();
       if (num_threads > 1) {
-        cost = evaluator.costPerCoeff(Vectorizable)
+        auto cost = evaluator.costPerCoeff(Vectorizable);
         num_threads = TensorCostModel<ThreadPoolDevice>::numThreads(
             size, evaluator.costPerCoeff(Vectorizable), num_threads);
       }

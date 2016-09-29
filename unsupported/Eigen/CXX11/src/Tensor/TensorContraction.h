@@ -330,7 +330,7 @@ struct TensorContractionEvaluatorBase
     m_leftImpl.evalSubExprsIfNeeded(NULL);
     m_rightImpl.evalSubExprsIfNeeded(NULL);
     if (data) {
-      evalTo(data);
+        evalTo(data);  // JB HERE
       return false;
     } else {
       m_result = static_cast<Scalar *>(m_device.allocate(dimensions().TotalSize() * sizeof(Scalar)));

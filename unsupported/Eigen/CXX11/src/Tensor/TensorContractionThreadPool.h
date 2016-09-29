@@ -204,6 +204,7 @@ struct TensorEvaluator<const TensorContractionOp<Indices, LeftArgType, RightArgT
         contractionCost(m, n, bm, bn, bk, shard_by_col, false);
     Index num_threads = TensorCostModel<ThreadPoolDevice>::numThreads(
         static_cast<double>(n) * m, cost, this->m_device.numThreads());
+    num_threads=1;
 
     // TODO(dvyukov): this is a stop-gap to prevent regressions while the cost
     // model is not tuned. Remove this when the cost model is tuned.
@@ -793,7 +794,7 @@ struct TensorEvaluator<const TensorContractionOp<Indices, LeftArgType, RightArgT
     OutputMapper output(buffer, m);
 
     // compute block sizes (which depend on number of threads)
-    const Index num_threads = this->m_device.numThreads();
+    const Index num_threads = 1;//this->m_device.numThreads();
     internal::TensorContractionBlocking<LhsMapper, RhsMapper, Index, internal::ShardByCol> blocking(k, m, n, num_threads);
     Index mc = blocking.mc();
     Index nc = blocking.nc();
