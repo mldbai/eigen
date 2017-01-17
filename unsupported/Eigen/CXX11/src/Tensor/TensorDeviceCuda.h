@@ -10,6 +10,15 @@
 #if defined(EIGEN_USE_GPU) && !defined(EIGEN_CXX11_TENSOR_TENSOR_DEVICE_CUDA_H)
 #define EIGEN_CXX11_TENSOR_TENSOR_DEVICE_CUDA_H
 
+// Allow a function declaration for a CUDA error
+#ifdef EigenCudaErrorFunctionDeclaration
+EigenCudaErrorFunctionDeclaration
+#endif
+
+#ifndef checkForCudaSuccess
+#  define checkForCudaSuccess(status) assert(status == cudaSuccess)
+#endif
+
 namespace Eigen {
 
 static const int kCudaScratchSize = 1024;
@@ -347,7 +356,7 @@ struct GpuDevice {
 
 #define LAUNCH_CUDA_KERNEL(kernel, gridsize, blocksize, sharedmem, device, ...)             \
   (kernel) <<< (gridsize), (blocksize), (sharedmem), (device).stream() >>> (__VA_ARGS__);   \
-  assert(cudaGetLastError() == cudaSuccess);
+  checkForCudaSuccess(cudaGetLastError());
 
 
 // FIXME: Should be device and kernel specific.
@@ -356,7 +365,7 @@ static EIGEN_DEVICE_FUNC inline void setCudaSharedMemConfig(cudaSharedMemConfig 
 #ifndef __CUDA_ARCH__
   cudaError_t status = cudaDeviceSetSharedMemConfig(config);
   EIGEN_UNUSED_VARIABLE(status)
-  assert(status == cudaSuccess);
+  checkForCudaSuccess(status);
 #else
   EIGEN_UNUSED_VARIABLE(config)
 #endif
