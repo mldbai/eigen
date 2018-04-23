@@ -406,7 +406,7 @@
 
 #ifdef __CUDACC__
 // Const expressions are supported provided that c++11 is enabled and we're using either clang or nvcc 7.5 or above
-#if EIGEN_MAX_CPP_VER>=14 && (__cplusplus > 199711L && defined(__CUDACC_VER__) && (EIGEN_COMP_CLANG || __CUDACC_VER__ >= 70500))
+#if EIGEN_MAX_CPP_VER>=14 && (__cplusplus > 199711L && defined(__CUDACC_VER_MAJOR__) && (EIGEN_COMP_CLANG || __CUDACC_VER_MAJOR__ >= 8))
   #define EIGEN_HAS_CONSTEXPR 1
 #endif
 #elif EIGEN_MAX_CPP_VER>=14 && (__has_feature(cxx_relaxed_constexpr) || (defined(__cplusplus) && __cplusplus >= 201402L) || \
